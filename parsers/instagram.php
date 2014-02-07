@@ -1,15 +1,16 @@
 <?php
 
-Class pnct_socialstream_twitterparser {
+Class pnct_socialstream_instagramparser {
     
     private $feed_uri;
     private $user_id;
-    private $username;
+    private $instagram_id;
     
-    public function __construct($username,$user_id) {
-        $this->feed_uri = 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name='.$username;
+    public function __construct($id,$user_id) {
+        $clientid = get_option('socialstream_instagram_clientid');
+        $this->feed_uri = 'https://api.instagram.com/v1/users/'.$id.'/media/recent/?client_id='.$clientid ;
         $this->user_id = $user_id;
-        $this->username = $username;
+        $this->instagram_id = $id;
     }
     
     public function retreive(){
@@ -18,7 +19,6 @@ Class pnct_socialstream_twitterparser {
 
         $options = array(
             'http' => array(
-                'header'  => "Authorization: Bearer ".get_option('socialstream_twitterbearer')."\r\n",
                 'method'  => 'GET'
             ),
         );
@@ -27,26 +27,27 @@ Class pnct_socialstream_twitterparser {
         
         $updates = json_decode($result);
         
-        $link = 'http://twitter.com/'.$this->username.'/status/';
-        
-        foreach ($updates as $tweet){
+        foreach ($updates->data as $photo){
+            dump($photo);die;
             $item = new pnct_socialstream_item();
-            $item->external_id = (string)$tweet->id_str;
-            $item->timestamp = strtotime($tweet->created_at);
+            $item->external_id = (string)$photo->id;
+            $item->timestamp = $photo->created_time;
             if($item->idAndStampUnchanged()){
                 continue;
             }
             
-            $item->type = 'twitter';
-            $item->user_id = $this->user_id;
-            $item->url = $link.$tweet->id_str;
+            $item->type      = 'instagram';
+            $item->user_id   = $this->instagram_id;
+            $item->url       = $photo->link;
             $item->published = $item->timestamp;
+            $item->thumbnail = $photo->images->thumbnail->url;
             
-            $desc = (string)$tweet->text;
-            //Converts UTF-8 into ISO-8859-1 to solve special symbols issues
-            $content = iconv("UTF-8", "ISO-8859-1//TRANSLIT", $desc);
+            $desc = array(
+                'image' => iconv("UTF-8", "ISO-8859-1//TRANSLIT", $photo->images->standard_resolution->url),
+                'caption' => iconv("UTF-8", "ISO-8859-1//TRANSLIT", $photo->caption->text )
+            );
 
-            $item->content = $content;
+            $item->content = serialize($desc);
             
             $item->save();
         }

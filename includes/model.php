@@ -16,7 +16,7 @@ Class pnct_socialstream_item{
 CREATE TABLE IF NOT EXISTS `%ssocialstream`  (
     `id` INT(10) NOT NULL AUTO_INCREMENT,
     `user_id` BIGINT(20) UNSIGNED NOT NULL,
-    `type` ENUM('twitter','facebook','vimeo','flickr') NOT NULL,
+    `type` ENUM('twitter','facebook','vimeo','flickr','instagram') NOT NULL,
     `external_id` VARCHAR(255) NULL DEFAULT NULL,
     `url` VARCHAR(255) NOT NULL,
     `content` TEXT NULL,
