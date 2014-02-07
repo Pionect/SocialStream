@@ -4,15 +4,67 @@
     <?php endif; ?>
     <?php screen_icon(); ?>
     <h2>Social Stream</h2>
-    <?php /*<form method="post" action="options.php"> 
+    <form method="post" action="options.php"> 
         <?php settings_fields( 'socialstream' ); ?>
-        <h3>Instellingen</h3>
-        <label for="color" style="display: inline-block;width: 150px;">Color</label>
+        <h3><?php _e('Settings');?></h3>
+        <?php /*  Choose social media platforms */ ?>
+        <?php /* <label for="color" style="display: inline-block;width: 150px;">Color</label>
         <input type="text" name="socialstream_color" value="<?php echo get_option('socialstream_color'); ?>" /><br/>
-        <small>For example: #333333;</small>
-         <?php submit_button(); ?>
+        <small>For example: #333333;</small> */ ?>
+        
+        <strong>How to use this plugin</strong><br/>
+        <?php $usertype = get_option('socialstream_usertype'); ?>
+        <label><input type="radio" <?php checked($usertype,'single'); ?> class="usertype" name="socialstream_usertype" value="single"> single user</label><br/>
+        <label><input type="radio" <?php checked($usertype,'wp_users'); ?> class="usertype" name="socialstream_usertype" value="wp_users"> wp_users </label><br/>
+        <label><input type="radio" <?php checked($usertype,'wp_post'); ?> class="usertype" name="socialstream_usertype" value="wp_post"> wp_post</label><br/>
+        <select id="post_types" name="socialstream_user_posttype" style="display:none;">
+            <option value="">Pick a post type</option>
+            <?php $args = array('public'=>true);
+            $post_types = get_post_types( $args, 'names' ); 
+            $user_posttype = get_option('socialstream_user_posttype');
+            foreach ( $post_types as $post_type ) {
+               echo '<option value="' . $post_type . '" '.selected($usertype,$post_type).'>' . $post_type . '</option>';
+            } ?>
+        </select>
+        <br/>
+        <!-- In case there is only a single user -->
+        <div id="single_user_accounts">
+            <strong>Single user accounts</strong><br/>
+            <label for="socialstream_useraccounts[twitter]" style="display: inline-block;width: 150px;">twitter user</label>
+            <input type="text" name="socialstream_useraccounts[twitter]" value="<?php echo $accounts['twitter']; ?>" /><br/>
+            <label for="socialstream_useraccounts[facebook]" style="display: inline-block;width: 150px;">facebook user</label>
+            <input type="text" name="socialstream_useraccounts[facebook]" value="<?php echo $accounts['facebook'];  ?>" /><br/>
+            <label for="socialstream_useraccounts[flickr]" style="display: inline-block;width: 150px;">flick user</label>
+            <input type="text" name="socialstream_useraccounts[flick]" value="<?php echo $accounts['flickr'];  ?>" /><br/>
+            <label for="socialstream_useraccounts[vimeo]" style="display: inline-block;width: 150px;">vimeo user</label>
+            <input type="text" name="socialstream_useraccounts[vimeo]" value="<?php echo $accounts['vimeo'];  ?>" /><br/>
+            <label for="socialstream_useraccounts[instagram]" style="display: inline-block;width: 150px;">Instagram user</label>
+            <input type="text" name="socialstream_useraccounts[instagram]" value="<?php echo $accounts['instagram']; ?>" /><br/>
+        </div>
+        <?php submit_button('Save settings'); ?>
+        <script>
+            jQuery('.usertype').change(function(){
+                userTypeUI();
+            })
+            function userTypeUI(){
+                var $ = jQuery,
+                    value = jQuery('.usertype:checked').val();
+                if(value=='wp_post'){
+                    $('#post_types').show();
+                } else {
+                    $('#post_types').hide();
+                }
+                
+                if(value=='single'){
+                    $('#single_user_accounts').show();
+                } else {
+                    $('#single_user_accounts').hide();
+                }
+            }
+            userTypeUI();
+        </script>
     </form>
-    <hr> */ ?>
+    <hr>
     <h3>Twitter setup</h3>
     <?php if(!get_option('socialstream_twitterbearer')): ?>
     <form method="post" action="admin-post.php?action=pnct_socialstream_getTwitterBearer"> 
@@ -25,7 +77,7 @@
         <input type="text" name="twitter_key" /><br/>
         <label for="twitter_secret" style="display: inline-block;width: 150px;">Consumer secret</label>
         <input type="text" name="twitter_secret"/><br/>
-         <?php submit_button(); ?>
+         <?php submit_button('Save Twitter settings'); ?>
     </form>
     <?php else: ?>
         <p>Your Twitter application has been setup correctly.</p>

@@ -6,7 +6,7 @@ class pnct_socialstream_settings {
 		add_action('admin_menu', array(&$this, 'admin_menu'));
         //voor de knop 'manual import' op de settings page
         add_action('admin_post_pnct_socialstream_startcron', array(&$this, 'startImportManual'));
-        
+        add_action('admin_post_pnct_socialstream_saveSettings',array(&$this, 'saveSettings'));
         add_action('admin_post_pnct_socialstream_getTwitterBearer',array(&$this, 'getTwitterBearer'));
 	}
     
@@ -18,12 +18,17 @@ class pnct_socialstream_settings {
     
     function init_settings(){
         register_setting('socialstream', 'socialstream_color',array(&$this,'checkColor'));
-        /*add_settings_field(
-            'socialstream_color', 
-            'Color', 
-            array($this, 'create_an_id_field'), 
-            'pnct-socialstream'			
-        );*/
+        register_setting('socialstream', 'socialstream_useraccounts',array(&$this,'checkAccounts'));
+        register_setting('socialstream', 'socialstream_platforms');
+        register_setting('socialstream', 'socialstream_usertype');
+        register_setting('socialstream', 'socialstream_user_posttype');
+        /*add_settings_field('socialstream_color', 'Color', array($this, 'create_an_id_field'), 'pnct-socialstream');*/
+    }
+    
+    function checkAccounts($input){
+        //in future loop over $input
+        //find facebook id, flickr_id 
+        return $input;
     }
     
     function checkColor($input){
@@ -36,8 +41,13 @@ class pnct_socialstream_settings {
     }
     
 	function  settings_page () {
+        $accounts = get_option('socialstream_useraccounts');
 		include_once SOCIALSTREAM_DIR.'/assets/settings.php';
 	}
+    
+    function saveSettings(){
+        print_r($_POST);die;
+    }
     
     function startImportManual(){
         wp_clear_scheduled_hook('pnct_socialstream_import');

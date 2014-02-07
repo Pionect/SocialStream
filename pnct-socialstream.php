@@ -55,3 +55,12 @@ function pnct_socialstream_styles() {
     wp_register_style( 'socialstream', plugins_url('css/index.css',__FILE__) );
     wp_enqueue_style( 'socialstream' );
 }
+
+// Add settings link on plugin page
+function pnct_socialstream_settings_link($links) { 
+  $settings_link = '<a href="options-general.php?page=pnct-socialstream">Settings</a>'; 
+  array_unshift($links, $settings_link); 
+  return $links; 
+}
+$plugin = plugin_basename( __FILE__ );
+add_filter( "plugin_action_links_$plugin", 'pnct_socialstream_settings_link' );
