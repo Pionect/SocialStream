@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Social Stream
-Description: This plugin imports social media messages for multiple users.
+Description: This plugin imports social media messages.
 Author: Pionect - Tomas van Rijsse
 Version: 1.0
 Author URI: http://www.pionect.nl
