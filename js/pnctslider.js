@@ -8,13 +8,13 @@
 </div>
 <script>
 var slider = new PNCTSLIDER({
-    $slidesframe:$('#slides'); //or supply slideWitdh if slideframe doens't have the correct size;
-    $slidescontainer: $('#slidescontainer');
+    $slidesframe:jQuery('#slides'); //or supply slideWitdh if slideframe doens't have the correct size;
+    $slidescontainer: jQuery('#slidescontainer');
     pageTransition:'slide',
     autoplay:true,
     timerSpeed:1000,
-    $leftbutton:$('#slider_left'),
-    $rightbutton:$('#slider_right')
+    $leftbutton:jQuery('#slider_left'),
+    $rightbutton:jQuery('#slider_right')
 });
 </script>
 */
@@ -29,8 +29,8 @@ var slider = new PNCTSLIDER({
 </div>
 <script>
 var slider = new PNCTSLIDER({
-    $slides:$('#slider div'),
-    $indicators:$('#sliderindicators div'),
+    $slides:jQuery('#slider div'),
+    $indicators:jQuery('#sliderindicators div'),
     pageTransition:'fade',
     autoplay:true,
     timerSpeed:7000
@@ -119,7 +119,7 @@ function PNCTSLIDER(options){
         if(self.$slidesframe !== undefined){ hoverables.push(self.$slidesframe); }
         if(self.$slides !== undefined){ hoverables.push(self.$slides); }
             
-        $(hoverables).each(function(){
+        jQuery(hoverables).each(function(){
             this.hover(function(){
                 clearTimeout(self.slidetimer);
             },function(){
@@ -132,10 +132,10 @@ function PNCTSLIDER(options){
     //als er thumbs zijn click/touch registeren.
     if(self.hasThumbs){
         self.$indicators.bind(self.START_EV,function(){
-            if($(this).hasClass('active')){
+            if(jQuery(this).hasClass('active')){
                 return false;
             }
-            var pageno = self.$indicators.index($(this));
+            var pageno = self.$indicators.index(jQuery(this));
             self.loadPage(pageno);
             
             if(self.options.autoplay){

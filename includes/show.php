@@ -5,9 +5,10 @@ function pnct_socialstream_show( $atts ){
 		'user' => false,
         'format' => 'slider',
         'itemcount' => 3,
-        'size' => 'small'
+        'size' => 'small',
+        'itemlimit' => 10,
 	), $atts ) );
-    
+        
     $accepted_formats = array('slider','static');
     if(!in_array($format,$accepted_formats))$format = 'slider';
     
@@ -17,24 +18,27 @@ function pnct_socialstream_show( $atts ){
     $itemcount = (int)$itemcount;
     if(!is_int($itemcount))$itemcount = 3;
 
+    $itemlimit = (int)$itemlimit;
+    if(!is_int($itemlimit))$itemlimit = 10;
     
-    if($user!==FALSE){
+    if($user!==FALSE && SOCIALSTREAM_USERTYPE != 'single'){
         $user = (int)$user;
         $item = new pnct_socialstream_item();
 
         if(is_int($user)){
             $item->user_id = $user;
-            $items = $item->readAllByUser($user,15);
+            $items = $item->readAllByUser($user,$itemlimit);
+            die('a');
         } else {
             echo 'USER attribute was not numeric';
         }
     } else {
         $item = new pnct_socialstream_item();
-        $items = $item->readAll(15);
+        $items = $item->readAll($itemlimit);
     }
     
     $id = rand(100,999);
-
+    
     $return = '<div id="ss_slider'.$id.'" class="'.$size.'">';
     $return .= '<div class="ss_itemsframe">';
         $return .= '<div class="ss_items">';
@@ -57,7 +61,7 @@ function pnct_socialstream_show( $atts ){
     } else {
         /*
 <script>
-    $('.ss_item.facebook .ss_content, .ss_item.twitter .ss_content'){
+    jQuery('.ss_item.facebook .ss_content, .ss_item.twitter .ss_content'){
         
     }
 </script>
@@ -66,19 +70,61 @@ function pnct_socialstream_show( $atts ){
     }
     
     $return .= '<script>var ss_slider;
-        $(document).ready(function(){
+        jQuery(document).ready(function($){
         ss_slider = new PNCTSLIDER({
-            $slidesframe:    $("#ss_slider'.$id.'"),
-            $slidescontainer:$("#ss_slider'.$id.' .ss_items"),
-            $indicators:     $("#ss_indicators'.$id.' > div"),
+            $slidesframe:    jQuery("#ss_slider'.$id.'"),
+            $slidescontainer:jQuery("#ss_slider'.$id.' .ss_items"),
+            $indicators:     jQuery("#ss_indicators'.$id.' > div"),
             slideCount:      '.ceil(count($items)/$itemcount).','.
             ($itemcount=='3'?'slideWidth:      1005,':'').
             'autoplay:       true,
             timerSpeed:      4000,
-            $leftbutton:     $("#ss_slider'.$id.' .buttonleft"), 
-            $rightbutton:    $("#ss_slider'.$id.' .buttonright")
+            $leftbutton:     jQuery("#ss_slider'.$id.' .buttonleft"), 
+            $rightbutton:    jQuery("#ss_slider'.$id.' .buttonright")
         });
     });</script>';
     echo $return;
 }
 add_shortcode( 'socialstream', 'pnct_socialstream_show' );
+
+class Socialstream_Widget extends WP_Widget 
+{
+    public function __construct() {
+		parent::__construct(
+			'Socialstream_widget', // Base ID
+			'Socialstream widget', // Name
+			array( 'description' => 'Show a slideshow in the sidebar' ) // Args
+		);
+	}
+    
+    public function widget( $args, $instance ) {
+        $atts =  array(
+            //'user' => false,
+            'format' => $instance['format'],
+            'itemcount' => 1,
+            //'size' => 'small',
+            'itemlimit' => $instance['itemlimit'],
+        );
+        
+        pnct_socialstream_show($atts);
+	}
+    
+    public function form($instance) {
+        include SOCIALSTREAM_DIR.'/assets/widget_form.php';
+    }
+    
+    function update($new_instance, $old_instance) {
+        $new_instance['itemlimit'] = (int)$new_instance['itemlimit'];
+        return $new_instance;        
+    }
+    
+}
+
+//register NMI widgets
+function register_socialstream_widget() { 
+    $class = 'Socialstream_Widget';
+    if(class_exists($class)){
+        register_widget($class);
+    }
+ }
+add_action('widgets_init', 'register_socialstream_widget', 50);
