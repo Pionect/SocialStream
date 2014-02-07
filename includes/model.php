@@ -13,7 +13,7 @@ Class pnct_socialstream_item{
     public function initDB(){
         global $wpdb;
         $sql = $wpdb->prepare("
-CREATE TABLE IF NOT EXISTS `wp_socialstream`  (
+CREATE TABLE IF NOT EXISTS `%ssocialstream`  (
     `id` INT(10) NOT NULL AUTO_INCREMENT,
     `user_id` BIGINT(20) UNSIGNED NOT NULL,
     `type` ENUM('twitter','facebook','vimeo','flickr') NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `wp_socialstream`  (
     `published` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     INDEX `FK_socialstream_wp_posts` (`user_id`)
-);");
+);", $wpdb->prefix);
         //removed the ForeignKey for the case that there is only a single user in the options.
         /*,	CONSTRAINT `FK_socialstream_wp_posts` FOREIGN KEY (`user_id`) REFERENCES `wp_posts` (`ID`) */ 
         $wpdb->query($sql);
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `wp_socialstream`  (
     
     public function cleanupDB(){
         global $wpdb;
-        $sql = "DROP TABLE IF EXISTS `wp_socialstream`";
+        $sql = $wpdb->prepare("DROP TABLE IF EXISTS `%ssocialstream`",$wpdb->prefix);
         $wpdb->query($sql);
     }
     
