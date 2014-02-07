@@ -6,6 +6,7 @@ class pnct_socialstream_settings {
 		add_action('admin_menu', array(&$this, 'admin_menu'));
         //voor de knop 'manual import' op de settings page
         add_action('admin_post_pnct_socialstream_startcron', array(&$this, 'startImportManual'));
+        add_action('admin_post_pnct_socialstream_truncate', array(&$this, 'truncate'));
         add_action('admin_post_pnct_socialstream_saveSettings',array(&$this, 'saveSettings'));
         add_action('admin_post_pnct_socialstream_getTwitterBearer',array(&$this, 'getTwitterBearer'));
 	}
@@ -27,26 +28,30 @@ class pnct_socialstream_settings {
     }
     
     function checkAccounts($input){
+        $oldaccounts = get_option('socialstream_useraccounts');
         
         //in future loop over $input
         //find facebook id, flickr_id 
         if($input['instagram']!=""){
-            
-            $clientid = get_option('socialstream_instagram_clientid');
-            $url = 'https://api.instagram.com/v1/users/search?q='.$input['instagram'].'&client_id='.$clientid;
+            if($input['instagram'] != $oldaccounts['instagram']){
+                $clientid = get_option('socialstream_instagram_clientid');
+                $url = 'https://api.instagram.com/v1/users/search?q='.$input['instagram'].'&client_id='.$clientid;
 
-            $options = array(
-                'http' => array(
-                    'method'  => 'GET',
-                ),
-            );
-            
-            $context  = stream_context_create($options);
-            $result = json_decode(file_get_contents($url, false, $context));
-            if($result){  
-                if($result->meta->code==200 && count($result->data)>0){
-                    $input['instagram_id'] = $result->data[0]->id;
+                $options = array(
+                    'http' => array(
+                        'method'  => 'GET',
+                    ),
+                );
+
+                $context  = stream_context_create($options);
+                $result = json_decode(file_get_contents($url, false, $context));
+                if($result){  
+                    if($result->meta->code==200 && count($result->data)>0){
+                        $input['instagram_id'] = $result->data[0]->id;
+                    }
                 }
+            } else {
+                $input['instagram_id'] = $oldaccounts['instagram_id'];
             }
         }
         
@@ -99,4 +104,10 @@ class pnct_socialstream_settings {
         }
     }
     
+    function truncate(){
+        global $wpdb;
+        $sql = $wpdb->prepare('TRUNCATE TABLE `'.$wpdb->prefix.'socialstream`');
+        $wpdb->query($sql);
+        wp_redirect('/wp-admin/options-general.php?page=pnct-socialstream');
+    }
 }

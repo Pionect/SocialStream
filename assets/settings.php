@@ -98,4 +98,6 @@
     <a href="admin-post.php?action=pnct_socialstream_startcron" class="button-secondary">Run import manually</a>
     <br/><br/>
     <small>The next automated import and export is scheduled at <?php date_default_timezone_set('Europe/Amsterdam'); echo date('d-m-Y H:i',wp_next_scheduled('pnct_socialstream_import')); ?></small>
+    <br/><br/>
+    <a href="admin-post.php?action=pnct_socialstream_truncate" class="button-secondary">Clear the complete socialstream</a>
 </div>

@@ -64,3 +64,9 @@ function pnct_socialstream_settings_link($links) {
 }
 $plugin = plugin_basename( __FILE__ );
 add_filter( "plugin_action_links_$plugin", 'pnct_socialstream_settings_link' );
+
+function dump($var){
+    echo '<pre>';
+    print_r($var);
+    echo '</pre>';
+}
