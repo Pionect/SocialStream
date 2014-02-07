@@ -63,6 +63,17 @@
             }
             userTypeUI();
         </script>
+        <hr>
+        <h3>Instagram setup</h3>
+        <?php if(!get_option('socialstream_instagram_clientid')): ?>
+            TODO: explain what steps to take...<br/>
+            <label for="socialstream_instagram_clientid" style="display: inline-block;width: 150px;">Client ID</label>
+            <input type="text" name="socialstream_instagram_clientid" /><br/>
+             <?php submit_button('Save Instagram settings'); ?>
+        <?php else: ?>
+            <p>Your instagram application has been setup correctly.</p>
+            <input type="hidden" name="socialstream_instagram_clientid" value="<?php echo get_option('socialstream_instagram_clientid'); ?>"  />
+        <?php endif; ?>
     </form>
     <hr>
     <h3>Twitter setup</h3>

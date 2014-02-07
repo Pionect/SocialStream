@@ -22,12 +22,34 @@ class pnct_socialstream_settings {
         register_setting('socialstream', 'socialstream_platforms');
         register_setting('socialstream', 'socialstream_usertype');
         register_setting('socialstream', 'socialstream_user_posttype');
+        register_setting('socialstream', 'socialstream_instagram_clientid');
         /*add_settings_field('socialstream_color', 'Color', array($this, 'create_an_id_field'), 'pnct-socialstream');*/
     }
     
     function checkAccounts($input){
+        
         //in future loop over $input
         //find facebook id, flickr_id 
+        if($input['instagram']!=""){
+            
+            $clientid = get_option('socialstream_instagram_clientid');
+            $url = 'https://api.instagram.com/v1/users/search?q='.$input['instagram'].'&client_id='.$clientid;
+
+            $options = array(
+                'http' => array(
+                    'method'  => 'GET',
+                ),
+            );
+            
+            $context  = stream_context_create($options);
+            $result = json_decode(file_get_contents($url, false, $context));
+            if($result){  
+                if($result->meta->code==200 && count($result->data)>0){
+                    $input['instagram_id'] = $result->data[0]->id;
+                }
+            }
+        }
+        
         return $input;
     }
     
@@ -44,10 +66,6 @@ class pnct_socialstream_settings {
         $accounts = get_option('socialstream_useraccounts');
 		include_once SOCIALSTREAM_DIR.'/assets/settings.php';
 	}
-    
-    function saveSettings(){
-        print_r($_POST);die;
-    }
     
     function startImportManual(){
         wp_clear_scheduled_hook('pnct_socialstream_import');
