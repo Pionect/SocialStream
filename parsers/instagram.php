@@ -28,7 +28,6 @@ Class pnct_socialstream_instagramparser {
         $updates = json_decode($result);
         
         foreach ($updates->data as $photo){
-            dump($photo);die;
             $item = new pnct_socialstream_item();
             $item->external_id = (string)$photo->id;
             $item->timestamp = $photo->created_time;

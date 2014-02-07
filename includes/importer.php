@@ -12,7 +12,7 @@ Class pnct_socialstream_importer {
         
         global $wpdb;
         
-        $usertype = get_option('socialstream_usertype');
+        $usertype = SOCIALSTREAM_USERTYPE;
         
         switch($usertype){
             case 'wp_post':
@@ -27,15 +27,14 @@ Class pnct_socialstream_importer {
                 $accounts = get_option('socialstream_useraccounts');
                 
                 $stream = new stdClass();
-                $stream->user = $accounts['instagram_id'];
-                $stream->platform = 'instagram_id';
-                $stream->user_id          = 0;
+                $stream->user       = $accounts['instagram_id'];
+                $stream->platform   = 'instagram_id';
+                $stream->user_id    = 0;
                 
                 //$stream->vimeo_username   = $accounts['vimeo'];                
                 //$stream->instagram_id     = $accounts['instagram_id'];
                 //$stream->facebook_id    = $accounts['facebook_id'];
                 //$stream->flickr_id      = $accounts['flickr_id'];
-                //$stream->user_id          = 0;
                 $streams = array($stream);
                 break;
         }

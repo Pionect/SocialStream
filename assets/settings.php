@@ -13,7 +13,7 @@
         <small>For example: #333333;</small> */ ?>
         
         <strong>How to use this plugin</strong><br/>
-        <?php $usertype = get_option('socialstream_usertype'); ?>
+        <?php $usertype = SOCIALSTREAM_USERTYPE ?>
         <label><input type="radio" <?php checked($usertype,'single'); ?> class="usertype" name="socialstream_usertype" value="single"> single user</label><br/>
         <label><input type="radio" <?php checked($usertype,'wp_users'); ?> class="usertype" name="socialstream_usertype" value="wp_users"> wp_users </label><br/>
         <label><input type="radio" <?php checked($usertype,'wp_post'); ?> class="usertype" name="socialstream_usertype" value="wp_post"> wp_post</label><br/>

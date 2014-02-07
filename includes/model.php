@@ -46,11 +46,24 @@ CREATE TABLE IF NOT EXISTS `%ssocialstream`  (
     
     public function readAll($limit=10){
         global $wpdb;
-        $sql = $wpdb->prepare('SELECT ss.*, p.post_title as post_name
-FROM wp_socialstream ss
-JOIN wp_posts p ON ss.user_id = p.ID
-ORDER BY published DESC
-LIMIT  %d',$limit);
+        switch (SOCIALSTREAM_USERTYPE)
+        {
+            case 'single':
+                $sql = $wpdb->prepare('SELECT ss.*
+                FROM wp_socialstream ss
+                ORDER BY published DESC
+                LIMIT  %d',$limit);
+                break;
+            case 'wp_users':
+                break;
+            case 'wp_post':
+                $sql = $wpdb->prepare('SELECT ss.*, p.post_title as post_name
+                FROM wp_socialstream ss
+                JOIN wp_posts p ON ss.user_id = p.ID
+                ORDER BY published DESC
+                LIMIT  %d',$limit);
+                break;
+        }
         return $this->fillObjects($wpdb->get_results($sql));
     }
     

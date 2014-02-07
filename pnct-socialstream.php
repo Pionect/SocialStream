@@ -10,6 +10,7 @@ Plugin URI: http://www.pionect.nl
 
 define('SOCIALSTREAM_DIR', plugin_dir_path(__FILE__));
 define('SOCIALSTREAM_URL', plugin_dir_url(__FILE__));
+define('SOCIALSTREAM_USERTYPE',get_option('socialstream_usertype'));
 
 require_once 'includes/model.php';
 require_once 'includes/importer.php';
