@@ -2,11 +2,13 @@
 
 function pnct_socialstream_show( $atts ){
     extract( shortcode_atts( array(
-		'user' => false,
-        'format' => 'slider',
+		'user'      => false,
+        'format'    => 'slider',
         'itemcount' => 3,
-        'size' => 'small',
+        'size'      => 'small',
         'itemlimit' => 10,
+        'buttons'   => true,
+        'indicators'=> true
 	), $atts ) );
         
     $accepted_formats = array('slider','static');
@@ -50,23 +52,15 @@ function pnct_socialstream_show( $atts ){
         }
         $return .= '</div>';//end ss_items;
     $return .= '</div>';
-    $return .= '<div class="buttonleft"></div><div class="buttonright"></div>';
+    if($buttons){
+        $return .= '<div class="buttonleft"></div><div class="buttonright"></div>';
+    }
     $return .= '</div>';
     
-    if($size=="small"){
+    if($indicators){
         $return .= '<div id="ss_indicators'.$id.'">';
         for($i=0;$i<ceil(count($items)/$itemcount);$i++){$return.='<div></div>';}
         $return .= '</div>';
-        //$return .= '<style>.ss_typeicon {color:'.get_option('socialstream_color').'}</style>';
-    } else {
-        /*
-<script>
-    jQuery('.ss_item.facebook .ss_content, .ss_item.twitter .ss_content'){
-        
-    }
-</script>
-*/
-        //$return .= '<style>div[id^=ss_slider].large {background-color:'.get_option('socialstream_color').'}</style>';
     }
     
     $return .= '<script>var ss_slider;
@@ -75,13 +69,14 @@ function pnct_socialstream_show( $atts ){
             $slidesframe:    jQuery("#ss_slider'.$id.'"),
             $slidescontainer:jQuery("#ss_slider'.$id.' .ss_items"),
             $indicators:     jQuery("#ss_indicators'.$id.' > div"),
-            slideCount:      '.ceil(count($items)/$itemcount).','.
-            ($itemcount=='3'?'slideWidth:      1005,':'').
-            'autoplay:       true,
-            timerSpeed:      4000,
-            $leftbutton:     jQuery("#ss_slider'.$id.' .buttonleft"), 
-            $rightbutton:    jQuery("#ss_slider'.$id.' .buttonright")
-        });
+            slideCount:      '.ceil(count($items)/$itemcount).',
+            autoplay:        true,
+            timerSpeed:      4000';
+    if($buttons){
+        $return .= '$leftbutton:     jQuery("#ss_slider'.$id.' .buttonleft"), 
+            $rightbutton:    jQuery("#ss_slider'.$id.' .buttonright")';
+    }
+    $return .= '    });
     });</script>';
     echo $return;
 }
@@ -104,6 +99,8 @@ class Socialstream_Widget extends WP_Widget
             'itemcount' => 1,
             //'size' => 'small',
             'itemlimit' => $instance['itemlimit'],
+            'buttons' => ($instance['buttons']=='on'?true:false),
+            'indicators' => ($instance['indicators']=='on'?true:false),
         );
         
         pnct_socialstream_show($atts);

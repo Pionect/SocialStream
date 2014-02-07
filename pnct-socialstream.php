@@ -53,7 +53,9 @@ add_action( 'wp_enqueue_scripts', 'pnct_socialstream_styles' );
  */
 function pnct_socialstream_styles() {
     // Respects SSL, Style.css is relative to the current file
+    wp_register_script( 'pnctslider', plugins_url('js/pnctslider.js',__FILE__) );
     wp_register_style( 'socialstream', plugins_url('css/index.css',__FILE__) );
+    wp_enqueue_script('pnctslider');
     wp_enqueue_style( 'socialstream' );
 }
 
