@@ -32,7 +32,9 @@ register_deactivation_hook(__FILE__, 'pnct_socialstream_deactivation');
 
 function pnct_socialstream_activation() {
 	// opt-in for cron jobs
-    wp_schedule_event( time()+(10), 'daily', 'pnct_socialstream_import');
+    wp_schedule_event( time()+(10), 'hourly', 'pnct_socialstream_import');
+    $model = new pnct_socialstream_item();
+    $model->initDB();
 }
 
 function pnct_socialstream_deactivation() {    

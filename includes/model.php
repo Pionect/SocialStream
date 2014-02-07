@@ -10,6 +10,33 @@ Class pnct_socialstream_item{
     public $timestamp; // originele updated timestamp voor vergelijking bij import
     public $published; // timestamp voor sortering
     
+    public function initDB(){
+        global $wpdb;
+        $sql = $wpdb->prepare("
+CREATE TABLE IF NOT EXISTS `wp_socialstream`  (
+    `id` INT(10) NOT NULL AUTO_INCREMENT,
+    `user_id` BIGINT(20) UNSIGNED NOT NULL,
+    `type` ENUM('twitter','facebook','vimeo','flickr') NOT NULL,
+    `external_id` VARCHAR(255) NULL DEFAULT NULL,
+    `url` VARCHAR(255) NOT NULL,
+    `content` TEXT NULL,
+    `thumbnail` VARCHAR(255) NULL DEFAULT NULL,
+    `timestamp` VARCHAR(50) NOT NULL,
+    `published` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    INDEX `FK_socialstream_wp_posts` (`user_id`)
+);");
+        //removed the ForeignKey for the case that there is only a single user in the options.
+        /*,	CONSTRAINT `FK_socialstream_wp_posts` FOREIGN KEY (`user_id`) REFERENCES `wp_posts` (`ID`) */ 
+        $wpdb->query($sql);
+    }
+    
+    public function cleanupDB(){
+        global $wpdb;
+        $sql = "DROP TABLE IF EXISTS `wp_socialstream`";
+        $wpdb->query($sql);
+    }
+    
     public function save(){
         global $wpdb;
         $sql = $wpdb->prepare('INSERT INTO wp_socialstream (user_id,type,external_id,url,content,thumbnail,timestamp,published) VALUES (%d,%s,%s,%s,%s,%s,%s,FROM_UNIXTIME(%d))',
