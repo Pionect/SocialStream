@@ -39,7 +39,9 @@
             <label for="socialstream_useraccounts[vimeo]" style="display: inline-block;width: 150px;">vimeo user</label>
             <input type="text" name="socialstream_useraccounts[vimeo]" value="<?php echo $accounts['vimeo'];  ?>" /><br/>
             <label for="socialstream_useraccounts[instagram]" style="display: inline-block;width: 150px;">Instagram user</label>
-            <input type="text" name="socialstream_useraccounts[instagram]" value="<?php echo $accounts['instagram']; ?>" /><br/>
+            <input <?php echo($instagram_enabled?'':'disabled'); ?> type="text" name="socialstream_useraccounts[instagram]" value="<?php echo $accounts['instagram']; ?>" />
+            <?php echo($instagram_enabled?'':'&nbsp;<small>Finish the Instagram setup first</small>'); ?>
+            <br/>
         </div>
         <?php submit_button('Save settings'); ?>
         <script>

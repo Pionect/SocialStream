@@ -69,6 +69,7 @@ class pnct_socialstream_settings {
     
 	function  settings_page () {
         $accounts = get_option('socialstream_useraccounts');
+        $instagram_enabled = (get_option('socialstream_instagram_clientid')?TRUE:FALSE);
 		include_once SOCIALSTREAM_DIR.'/assets/settings.php';
 	}
     
@@ -106,7 +107,7 @@ class pnct_socialstream_settings {
     
     function truncate(){
         global $wpdb;
-        $sql = $wpdb->prepare('TRUNCATE TABLE `'.$wpdb->prefix.'socialstream`');
+        $sql = sprintf('TRUNCATE TABLE `%ssocialstream`',$wpdb->prefix);
         $wpdb->query($sql);
         wp_redirect('/wp-admin/options-general.php?page=pnct-socialstream');
     }

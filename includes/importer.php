@@ -16,12 +16,13 @@ Class pnct_socialstream_importer {
         
         switch($usertype){
             case 'wp_post':
-            // get all streams
-            $streams = $wpdb->get_results('SELECT post_id as user_id,meta_key as platform,meta_value as user
-                        FROM wp_postmeta pm
-                        INNER JOIN wp_posts p ON p.ID = pm.post_id
+                $sql = sprintf('SELECT post_id as user_id,meta_key as platform,meta_value as user
+                        FROM %spostmeta pm
+                        INNER JOIN %sposts p ON p.ID = pm.post_id
                         AND pm.meta_key IN ("facebook_id","twitter_username","flickr_id","vimeo_username")
-                        AND meta_value != ""');
+                        AND meta_value != ""',$wpdb->prefix,$wpdb->prefix);
+                // get all streams
+                $streams = $wpdb->get_results($sql);
             break;
             case 'single':
                 $accounts = get_option('socialstream_useraccounts');

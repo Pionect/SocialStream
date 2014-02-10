@@ -12,7 +12,7 @@ Class pnct_socialstream_item{
     
     public function initDB(){
         global $wpdb;
-        $sql = $wpdb->prepare("
+        $sql = sprintf("
 CREATE TABLE IF NOT EXISTS `%ssocialstream`  (
     `id` INT(10) NOT NULL AUTO_INCREMENT,
     `user_id` BIGINT(20) UNSIGNED NOT NULL,
@@ -33,14 +33,14 @@ CREATE TABLE IF NOT EXISTS `%ssocialstream`  (
     
     public function cleanupDB(){
         global $wpdb;
-        $sql = $wpdb->prepare("DROP TABLE IF EXISTS `%ssocialstream`",$wpdb->prefix);
+        $sql = sprintf("DROP TABLE IF EXISTS `%ssocialstream`",$wpdb->prefix);
         $wpdb->query($sql);
     }
     
     public function save(){
         global $wpdb;
-        $sql = $wpdb->prepare('INSERT INTO wp_socialstream (user_id,type,external_id,url,content,thumbnail,timestamp,published) VALUES (%d,%s,%s,%s,%s,%s,%s,FROM_UNIXTIME(%d))',
-          $this->user_id,$this->type,$this->external_id,$this->url,$this->content,$this->thumbnail,$this->timestamp,$this->published);
+        $sql = $wpdb->prepare('INSERT INTO %s_socialstream (user_id,type,external_id,url,content,thumbnail,timestamp,published) VALUES (%d,%s,%s,%s,%s,%s,%s,FROM_UNIXTIME(%d))',
+          $wpdb->prefix,$this->user_id,$this->type,$this->external_id,$this->url,$this->content,$this->thumbnail,$this->timestamp,$this->published);
         $wpdb->query($sql);
     }
     
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `%ssocialstream`  (
         {
             case 'single':
                 $sql = $wpdb->prepare('SELECT ss.*
-                FROM wp_socialstream ss
+                FROM '.$wpdb->prefix.'socialstream ss
                 ORDER BY published DESC
                 LIMIT  %d',$limit);
                 break;
@@ -58,8 +58,8 @@ CREATE TABLE IF NOT EXISTS `%ssocialstream`  (
                 break;
             case 'wp_post':
                 $sql = $wpdb->prepare('SELECT ss.*, p.post_title as post_name
-                FROM wp_socialstream ss
-                JOIN wp_posts p ON ss.user_id = p.ID
+                FROM '.$wpdb->prefix.'socialstream ss
+                JOIN '.$wpdb->prefix.'posts p ON ss.user_id = p.ID
                 ORDER BY published DESC
                 LIMIT  %d',$limit);
                 break;
@@ -70,9 +70,9 @@ CREATE TABLE IF NOT EXISTS `%ssocialstream`  (
     public function readAllByUser($user_id,$limit=10){
         global $wpdb;
         $sql = $wpdb->prepare('SELECT ss.*, p.post_title as post_name, meta_value as \'username\'
-FROM wp_socialstream ss
-JOIN wp_posts p ON ss.user_id = p.ID
-INNER JOIN wp_postmeta wpm ON wpm.post_id = ss.user_id AND wpm.meta_key = \'twitter_username\'
+FROM '.$wpdb->prefix.'socialstream ss
+JOIN '.$wpdb->prefix.'posts p ON ss.user_id = p.ID
+INNER JOIN '.$wpdb->prefix.'postmeta wpm ON wpm.post_id = ss.user_id AND wpm.meta_key = \'twitter_username\'
 WHERE ss.user_id = %d
 ORDER BY published DESC
 LIMIT  %d',$user_id,$limit);
@@ -81,7 +81,7 @@ LIMIT  %d',$user_id,$limit);
     
     public function idAndStampUnchanged(){
         global $wpdb;
-        $sql = $wpdb->prepare( "SELECT timestamp FROM wp_socialstream WHERE external_id = %s", $this->external_id);
+        $sql = $wpdb->prepare( "SELECT timestamp FROM '.$wpdb->prefix.'socialstream WHERE external_id = %s", $this->external_id);
         $stamp = $wpdb->get_var($sql);
         if( $stamp != ""){
             if($stamp == $this->timestamp){
