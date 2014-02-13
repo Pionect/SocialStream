@@ -102,6 +102,7 @@ class pnct_socialstream_settings {
 	function  settings_page () {
         $accounts = get_option('socialstream_useraccounts');
         $instagram_enabled = (get_option('socialstream_instagram_clientid')?TRUE:FALSE);
+        $twitter_enabled = (get_option('socialstream_twitterbearer')?TRUE:FALSE);
 		include_once SOCIALSTREAM_DIR.'/assets/settings.php';
 	}
     
@@ -129,10 +130,10 @@ class pnct_socialstream_settings {
         $result = json_decode(file_get_contents($url, false, $context));
         
         if($result){
-            
             update_option('socialstream_twitterbearer', $result->access_token);
             wp_redirect('/wp-admin/options-general.php?page=pnct-socialstream');
         } else {
+            update_option('socialstream_twitterbearer', '');
             wp_redirect('/wp-admin/options-general.php?page=pnct-socialstream&twitter=fail');
         }
     }

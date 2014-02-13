@@ -31,7 +31,7 @@
         <div id="single_user_accounts">
             <strong>Single user accounts</strong><br/>
             <label for="socialstream_useraccounts[twitter_username]" style="display: inline-block;width: 150px;">twitter username</label>
-            <input type="text" name="socialstream_useraccounts[twitter_username]" value="<?php echo $accounts['twitter_username']; ?>" /><br/>
+            <input type="text" name="socialstream_useraccounts[twitter_username]" value="<?php echo $accounts['twitter_username']; ?>" <?php echo($twitter_enabled?'':'disabled'); ?> /><br/>
             <label for="socialstream_useraccounts[facebook_username]" style="display: inline-block;width: 150px;">facebook username</label>
             <input type="text" name="socialstream_useraccounts[facebook_username]" value="<?php echo $accounts['facebook_username'];  ?>" /><br/>
             <label for="socialstream_useraccounts[flickr_username]" style="display: inline-block;width: 150px;">flickr username</label>
@@ -79,7 +79,7 @@
     </form>
     <hr>
     <h3>Twitter setup</h3>
-    <?php if(!get_option('socialstream_twitterbearer')): ?>
+    <?php if(!$twitter_enabled): ?>
     <form method="post" action="admin-post.php?action=pnct_socialstream_getTwitterBearer"> 
         <p>Twitter needs some manual work to get working.
         <ol><li>Go to <a href="https://dev.twitter.com/apps" target="_blank">dev.twitter.com/apps</a></li>

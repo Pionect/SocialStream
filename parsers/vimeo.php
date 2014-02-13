@@ -15,6 +15,7 @@ Class pnct_socialstream_vimeoparser {
         ini_set('user_agent', 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1.3) Gecko/20090824 Firefox/3.5.3');
 
         $updates = simplexml_load_file($this->feed_uri);  //Load feed with simplexml
+        if($updates==FALSE) return;
         
         foreach ($updates->video as $video){
             $item = new pnct_socialstream_item();
