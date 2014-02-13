@@ -25,25 +25,31 @@ Class pnct_socialstream_importer {
                 $streams = $wpdb->get_results($sql);
             break;
             case 'single':
+                $streams = array();
                 $accounts = get_option('socialstream_useraccounts');
                 $platforms = array('instagram_id','facebook_id','twitter_username','vimeo_username','flickr_id');
                 foreach($platforms as $platform){
                     if(!array_key_exists($platform,$accounts)) continue;
+                    if($accounts[$platform] == "")continue;
                     
                     $stream = new stdClass();
                     $stream->user       = $accounts[$platform];
                     $stream->platform   = $platform;
                     $stream->user_id    = 0;
-                    $streams = array($stream);   
+                    $streams[] = $stream;   
                 }
                 break;
         }
+        
+        $instagram_enabled = (get_option('socialstream_instagram_clientid')?TRUE:FALSE);
+        $twitter_enabled = (get_option('socialstream_twitterbearer')?TRUE:FALSE);
         
         // loop over streams URIs        
         foreach($streams as $stream){
             // instantiate custom parser
             switch($stream->platform){
                 case 'twitter_username':
+                    if(!$twitter_enabled){ break; }
                     $parser = new pnct_socialstream_twitterparser($stream->user,$stream->user_id);
                     $parser->retreive();
                     break;
@@ -60,6 +66,7 @@ Class pnct_socialstream_importer {
                     $parser->retreive();
                     break;
                 case 'instagram_id':
+                    if(!$instagram_enabled){ break; }
                     $parser = new pnct_socialstream_instagramparser($stream->user,$stream->user_id);
                     $parser->retreive();
                     break;
