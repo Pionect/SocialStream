@@ -6,7 +6,7 @@ Class pnct_socialstream_vimeoparser {
     private $user_id;
     
     public function __construct($username,$user_id) {
-        $this->feed_uri = 'http://vimeo.com/api/v2/username/videos.xml'.$username;
+        $this->feed_uri = 'http://vimeo.com/api/v2/'.$username.'/videos.xml';
         $this->user_id = $user_id;
     }
     
