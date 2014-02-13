@@ -16,6 +16,8 @@ Class pnct_socialstream_flickrparser {
 
         $updates = simplexml_load_file($this->feed_uri);  //Load feed with simplexml
         
+        //add check for $updates
+        
         foreach ($updates->entry as $entry){
             $item = new pnct_socialstream_item();
             $external_id = (string)$entry->id;

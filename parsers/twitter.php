@@ -29,6 +29,8 @@ Class pnct_socialstream_twitterparser {
         
         $link = 'http://twitter.com/'.$this->username.'/status/';
         
+        if(!is_array($updates)) return;
+        
         foreach ($updates as $tweet){
             $item = new pnct_socialstream_item();
             $item->external_id = (string)$tweet->id_str;

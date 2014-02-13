@@ -27,6 +27,8 @@ Class pnct_socialstream_instagramparser {
         
         $updates = json_decode($result);
         
+        if(!is_object($updates)) return;
+        
         foreach ($updates->data as $photo){
             $item = new pnct_socialstream_item();
             $item->external_id = (string)$photo->id;
