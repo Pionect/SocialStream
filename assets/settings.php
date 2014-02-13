@@ -30,16 +30,16 @@
         <!-- In case there is only a single user -->
         <div id="single_user_accounts">
             <strong>Single user accounts</strong><br/>
-            <label for="socialstream_useraccounts[twitter]" style="display: inline-block;width: 150px;">twitter user</label>
-            <input type="text" name="socialstream_useraccounts[twitter]" value="<?php echo $accounts['twitter']; ?>" /><br/>
-            <label for="socialstream_useraccounts[facebook]" style="display: inline-block;width: 150px;">facebook user</label>
-            <input type="text" name="socialstream_useraccounts[facebook]" value="<?php echo $accounts['facebook'];  ?>" /><br/>
-            <label for="socialstream_useraccounts[flickr]" style="display: inline-block;width: 150px;">flick user</label>
-            <input type="text" name="socialstream_useraccounts[flick]" value="<?php echo $accounts['flickr'];  ?>" /><br/>
-            <label for="socialstream_useraccounts[vimeo]" style="display: inline-block;width: 150px;">vimeo user</label>
-            <input type="text" name="socialstream_useraccounts[vimeo]" value="<?php echo $accounts['vimeo'];  ?>" /><br/>
-            <label for="socialstream_useraccounts[instagram]" style="display: inline-block;width: 150px;">Instagram user</label>
-            <input <?php echo($instagram_enabled?'':'disabled'); ?> type="text" name="socialstream_useraccounts[instagram]" value="<?php echo $accounts['instagram']; ?>" />
+            <label for="socialstream_useraccounts[twitter_username]" style="display: inline-block;width: 150px;">twitter username</label>
+            <input type="text" name="socialstream_useraccounts[twitter_username]" value="<?php echo $accounts['twitter_username']; ?>" /><br/>
+            <label for="socialstream_useraccounts[facebook_username]" style="display: inline-block;width: 150px;">facebook username</label>
+            <input type="text" name="socialstream_useraccounts[facebook_username]" value="<?php echo $accounts['facebook_username'];  ?>" /><br/>
+            <label for="socialstream_useraccounts[flickr_username]" style="display: inline-block;width: 150px;">flickr username</label>
+            <input type="text" name="socialstream_useraccounts[flickr_username]" value="<?php echo $accounts['flickr_username'];  ?>" /><br/>
+            <label for="socialstream_useraccounts[vimeo_username]" style="display: inline-block;width: 150px;">vimeo username</label>
+            <input type="text" name="socialstream_useraccounts[vimeo_username]" value="<?php echo $accounts['vimeo_username'];  ?>" /><br/>
+            <label for="socialstream_useraccounts[instagram_username]" style="display: inline-block;width: 150px;">Instagram username</label>
+            <input type="text" name="socialstream_useraccounts[instagram_username]" value="<?php echo $accounts['instagram_username']; ?>" <?php echo($instagram_enabled?'':'disabled'); ?> />
             <?php echo($instagram_enabled?'':'&nbsp;<small>Finish the Instagram setup first</small>'); ?>
             <br/>
         </div>

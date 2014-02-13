@@ -32,10 +32,10 @@ class pnct_socialstream_settings {
         
         //in future loop over $input
         //find facebook id, flickr_id 
-        if($input['instagram']!=""){
-            if($input['instagram'] != $oldaccounts['instagram']){
+        if($input['instagram_username']!=""){
+            if($input['instagram_username'] != $oldaccounts['instagram_username']){
                 $clientid = get_option('socialstream_instagram_clientid');
-                $url = 'https://api.instagram.com/v1/users/search?q='.$input['instagram'].'&client_id='.$clientid;
+                $url = 'https://api.instagram.com/v1/users/search?q='.$input['instagram_username'].'&client_id='.$clientid;
 
                 $options = array(
                     'http' => array(

@@ -26,17 +26,16 @@ Class pnct_socialstream_importer {
             break;
             case 'single':
                 $accounts = get_option('socialstream_useraccounts');
-                
-                $stream = new stdClass();
-                $stream->user       = $accounts['instagram_id'];
-                $stream->platform   = 'instagram_id';
-                $stream->user_id    = 0;
-                
-                //$stream->vimeo_username   = $accounts['vimeo'];                
-                //$stream->instagram_id     = $accounts['instagram_id'];
-                //$stream->facebook_id    = $accounts['facebook_id'];
-                //$stream->flickr_id      = $accounts['flickr_id'];
-                $streams = array($stream);
+                $platforms = array('instagram_id','facebook_id','twitter_username','vimeo_username','flickr_id');
+                foreach($platforms as $platform){
+                    if(!array_key_exists($platform,$accounts)) continue;
+                    
+                    $stream = new stdClass();
+                    $stream->user       = $accounts[$platform];
+                    $stream->platform   = $platform;
+                    $stream->user_id    = 0;
+                    $streams = array($stream);   
+                }
                 break;
         }
         
