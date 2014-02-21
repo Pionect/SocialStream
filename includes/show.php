@@ -78,7 +78,7 @@ function pnct_socialstream_show( $atts ){
     }
     $return .= '    });
     });</script>';
-    echo $return;
+    return $return;
 }
 add_shortcode( 'socialstream', 'pnct_socialstream_show' );
 
